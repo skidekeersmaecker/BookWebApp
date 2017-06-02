@@ -1,0 +1,10 @@
+API authentication:
+https://developers.google.com/identity/
+
+API books:
+https://developers.google.com/books/
+http://stackoverflow.com/questions/14571478/using-google-book-api
+
+API database:
+https://firebase.google.com/
+

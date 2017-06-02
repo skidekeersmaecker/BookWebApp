@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en" ng-app="BookApp">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BookWebApp</title>
+
+    <!-- Angular -->
+    <script src="angular.min.js"></script>
+
+    <!-- App specific -->
+    <script src="app.js"></script>
+
+    <!-- google books -->
+    <script type="text/javascript" src="https://www.google.com/books/jsapi.js"></script>
+
+    <!-- paypal -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://www.paypalobjects.com/api/checkout.js"></script>
+
+      
+  </head>
+  <body >
+    <div ng-controller="StartCtrl">
+      <p>FACEBOOK OAUTH:</p>
+      <button ng-click="login()">Log in</button>
+      OAuth: {{ name }}
+
+      <p>FIREBASE API: </p>
+      <p>Firebase: {{ gebruiker.naam}}</p>
+    </div>
+
+    <div ng-controller="googlebooks">
+      <p>GOOGLE BOOKS API:</p>
+      <p>Fill in the ISBN of your book: </p>
+      <input type="text" ng-model="inputisbn" value="0486404374">
+      <button ng-click="loadBook()">Load Book</button>
+      <p>Aantal isbn's om te gebruiken: 1905570074, 1480402001, 0156835800 of zelf een boek opzoeken *.</p>
+      <p>* Sommige boeken bevatten mogelijk geen ingevuld json object, zoals ik heb gemerkt bij veel Nederlandse schrijvers. Dan verandert de titel en auteur niet, maar wel de viewer. (Harry Mulisch - De ontdekking van de Hemel: 9023443985)</p>
+      <p>* Sommige boeken hebben geen preview en worden dus niet getoond in de viewer. Zoals de laatste van de voorbeelden.</p>
+      <p>Auteur: {{ auteur }}</p>
+      <p>Titel: {{ titel }}</p>
+      <div id="viewerCanvas" style="width: 800px; height: 500px"></div>
+    </div>
+
+    <!-- Paypal -->
+    <p>PAYPAL API:</p>
+    <div id="paypal-button"></div>
+  <script>
+      paypal.Button.render({
+
+          env: 'sandbox', // Or 'production',
+
+          client: {
+              sandbox: 'AT0E7sk0VwfG8uK0zsip8ZNWLpz4WlGw_QAn1bGtQph_O2Ma1q9khGA83F5GmoDNj5H9r5wS0vALFL5R',
+              production: 'AenodSvZbJ-Q-2uv-1RCR22X3E3gb9vnz-hW2yF3KZasEHQ8kdv3ZdOerob7PiIHwW4v-EcsziI2x0hR'
+          },
+
+          commit: true,
+
+          payment: function(data, actions) {
+              return actions.payment.create({
+                  transactions: [
+                      {
+                          amount: { total: '0.01', currency: 'EUR' }
+                      }
+                  ]
+              });
+          },
+
+          onAuthorize: function(data, actions) {
+              return actions.payment.execute().then(function() {
+                  window.alert('Payment Complete!');
+              });
+          }
+
+      }, '#paypal-button');
+  </script>
+  </body>
+</html>
